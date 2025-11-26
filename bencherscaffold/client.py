@@ -57,7 +57,7 @@ class BencherClient:
         elif all(p.type == ValueType.BINARY for p in point):
             benchmark_type = BenchmarkType.PURELY_BINARY
         elif all(p.type == ValueType.INTEGER for p in point):
-            benchmark_type = BenchmarkType.PURELY_ORDINAL_INT,
+            benchmark_type = BenchmarkType.PURELY_ORDINAL_INT
         elif all(p.type == ValueType.CATEGORICAL for p in point):
             benchmark_type = BenchmarkType.PURELY_CATEGORICAL
         else:

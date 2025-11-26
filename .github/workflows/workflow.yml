@@ -55,7 +55,7 @@ jobs:
           github-token: ${{ secrets.BENCHER_TOKEN }}
           script: |
             await github.rest.actions.createWorkflowDispatch({
-              owner: 'LeoIV',
+              owner: 'lpapenme',
               repo: 'bencher',
               ref: 'main',
               workflow_id: 'update_scaffold_version.yml'
