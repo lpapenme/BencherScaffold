@@ -1,5 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
-from typing import Iterable, Tuple
+from typing import Iterable, Tuple, Optional, List
 
 import grpc
 import logging
@@ -10,10 +10,16 @@ from bencherscaffold.protoclasses.grcp_service import GRCPService as _BaseGRCPSe
 _DEFAULT_HOSTS: Tuple[str, str] = ("0.0.0.0", "[::]")
 
 
-def _normalize_hosts(listen_hosts: Iterable[str] | None) -> tuple[str, ...]:
+def _normalize_hosts(listen_hosts: Optional[Iterable[str]]) -> Tuple[str, ...]:
+    """
+    Normalizes a list of listener hosts, handling None and removing duplicates/empty strings.
+    This function has been updated to use Optional[Iterable[str]] instead of Iterable[str] | None
+    and List/Tuple for consistency with Python 3.8 typing.
+    """
     if listen_hosts is None:
         listen_hosts = _DEFAULT_HOSTS
-    normalized: list[str] = []
+    # Explicitly use List from typing for Python 3.8 compatibility
+    normalized: List[str] = []
     for host in listen_hosts:
         candidate = host.strip()
         if candidate and candidate not in normalized:
@@ -26,14 +32,14 @@ class DualStackGRCPService(_BaseGRCPService):
     def __init__(
             self,
             *,
-            listen_hosts: Iterable[str] | None = None,
+            listen_hosts: Optional[Iterable[str]] = None,
             **kwargs
     ):
         super().__init__(**kwargs)
         self._listen_hosts = _normalize_hosts(listen_hosts)
 
     @property
-    def listen_hosts(self) -> tuple[str, ...]:
+    def listen_hosts(self) -> Tuple[str, ...]:
         return self._listen_hosts
 
     def serve(self):
