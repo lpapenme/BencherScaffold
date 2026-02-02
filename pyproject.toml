@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "bencherscaffold"
-version = "0.4.3"
+version = "0.4.4"
 description = ""
 authors = [ "Leonard Papenmeier <leonard@papenmeier.io>",]
 readme = "README.md"
@@ -14,10 +14,19 @@ include = "bencherscaffold"
 from = "."
 
 [tool.poetry.dependencies]
-python = ">=3.8,<=3.14"
-grpcio = "^1.60.1"
-protobuf = "^4.25.2"
+python = ">=3.8,<3.15"
+grpcio = [
+    { version = "~1.70.0", markers = "python_version < '3.14'" },
+    { version = "~1.76.0", markers = "python_version >= '3.14'" },
+]
+protobuf = [
+    { version = "~4.25.0,", markers = "python_version < '3.14'" },
+    { version = "~6.31.0", markers = "python_version >= '3.14'" },
+]
 
 [tool.poetry.group.dev.dependencies]
 toml = "^0.10.2"
-grpcio-tools = "1.62.2"
+grpcio-tools = [
+    { version = "~1.62.0", markers = "python_version < '3.14'" },
+    { version = "~1.76.0", markers = "python_version >= '3.14'" },
+]
