@@ -14,7 +14,7 @@ include = "bencherscaffold"
 from = "."
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.14"
+python = ">=3.8,<=3.14"
 grpcio = "^1.60.1"
 protobuf = "^4.25.2"
 
