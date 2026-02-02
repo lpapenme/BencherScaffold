@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "bencherscaffold"
-version = "0.4.5"
+version = "0.4.6"
 description = ""
 authors = [ "Leonard Papenmeier <leonard@papenmeier.io>",]
 readme = "README.md"
