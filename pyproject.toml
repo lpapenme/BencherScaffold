@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "bencherscaffold"
-version = "0.4.4"
+version = "0.4.5"
 description = ""
 authors = [ "Leonard Papenmeier <leonard@papenmeier.io>",]
 readme = "README.md"
@@ -15,18 +15,29 @@ from = "."
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.15"
-grpcio = [
-    { version = "~1.70.0", markers = "python_version < '3.14'" },
-    { version = "~1.76.0", markers = "python_version >= '3.14'" },
-]
-protobuf = [
-    { version = "~4.25.0,", markers = "python_version < '3.14'" },
-    { version = "~6.31.0", markers = "python_version >= '3.14'" },
-]
+[[tool.poetry.dependencies.grpcio]]
+version = "~1.70.0"
+markers = "python_version < '3.14'"
+
+[[tool.poetry.dependencies.grpcio]]
+version = "~1.76.0"
+markers = "python_version >= '3.14'"
+
+[[tool.poetry.dependencies.protobuf]]
+version = "~4.25.0,"
+markers = "python_version < '3.14'"
+
+[[tool.poetry.dependencies.protobuf]]
+version = "~6.31.0"
+markers = "python_version >= '3.14'"
 
 [tool.poetry.group.dev.dependencies]
 toml = "^0.10.2"
-grpcio-tools = [
-    { version = "~1.62.0", markers = "python_version < '3.14'" },
-    { version = "~1.76.0", markers = "python_version >= '3.14'" },
-]
+[[tool.poetry.group.dev.dependencies.grpcio-tools]]
+version = "~1.62.0"
+markers = "python_version < '3.14'"
+
+[[tool.poetry.group.dev.dependencies.grpcio-tools]]
+version = "~1.76.0"
+markers = "python_version >= '3.14'"
+
