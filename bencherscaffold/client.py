@@ -3,6 +3,7 @@ from collections.abc import Sequence
 
 import grpc
 
+from bencherscaffold.dual_stack_service import grpc_target
 from bencherscaffold.protoclasses.bencher_pb2 import (
     BenchmarkRequest, EvaluationResult, Point, Benchmark,
     BenchmarkType, Value, ValueType,
@@ -13,7 +14,7 @@ from bencherscaffold.protoclasses.bencher_pb2_grpc import BencherStub
 class BencherClient:
     def __init__(
             self,
-            hostname: str = '127.0.0.1',
+            address: str = '127.0.0.1',
             port: int = 50051,
             max_retries: int = 10,
             wait_time: int = 5,
@@ -21,12 +22,13 @@ class BencherClient:
         """
         Initializes the BencherClient with the given parameters.
         Args:
-            hostname: The hostname of the server.
-            port: The port number of the server.
+            address: The address of the server. Can be an IP address/hostname
+                or a Unix socket path (e.g. "unix:///tmp/bencher.sock").
+            port: The port number of the server. Ignored for Unix sockets.
             max_retries: The maximum number of retries for the request.
             wait_time: The time to wait between retries in seconds.
         """
-        self.channel = grpc.insecure_channel(f"{hostname}:{port}")
+        self.channel = grpc.insecure_channel(grpc_target(address, port))
         self.stub = BencherStub(self.channel)
         self.max_retries = max_retries
         self.wait_time = wait_time
