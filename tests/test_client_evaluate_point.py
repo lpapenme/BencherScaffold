@@ -178,3 +178,36 @@ class TestRetryLoop:
         client = make_client(max_retries=0)
         assert client.evaluate_point("bench", _point(ValueType.CONTINUOUS)) is None
         assert client.stub.calls == 0
+
+
+class TestRandomSeed:
+    """The optional seed field: proto3 presence is what makes seed 0 expressible."""
+
+    def test_seed_is_unset_by_default(self, make_client):
+        client = make_client()
+        client.evaluate_point("bench", _point(ValueType.CONTINUOUS))
+        assert not client.stub.requests[0].HasField("random_seed")
+
+    def test_explicit_none_leaves_it_unset(self, make_client):
+        client = make_client()
+        client.evaluate_point("bench", _point(ValueType.CONTINUOUS), random_seed=None)
+        assert not client.stub.requests[0].HasField("random_seed")
+
+    def test_zero_is_a_real_seed_not_an_absent_one(self, make_client):
+        """Without `optional` in the proto this case is indistinguishable from unset,
+        which would silently turn a deterministic seed of 0 into 'unseeded'."""
+        client = make_client()
+        client.evaluate_point("bench", _point(ValueType.CONTINUOUS), random_seed=0)
+
+        request = client.stub.requests[0]
+        assert request.HasField("random_seed")
+        assert request.random_seed == 0
+
+    @pytest.mark.parametrize("seed", [1, 42, 2**32 - 1])
+    def test_seed_is_passed_through(self, make_client, seed):
+        client = make_client()
+        client.evaluate_point("bench", _point(ValueType.CONTINUOUS), random_seed=seed)
+
+        request = client.stub.requests[0]
+        assert request.HasField("random_seed")
+        assert request.random_seed == seed

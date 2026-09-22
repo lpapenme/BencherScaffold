@@ -135,3 +135,20 @@ def test_constraints_survive_the_wire(tcp_server):
         ("c2", ConstraintType.EQUALITY, 0.0),
     ]
     assert result.objectives[0].value == 44.0
+
+
+@pytest.mark.parametrize("seed", [None, 0, 7])
+def test_random_seed_reaches_the_server(tcp_server, seed):
+    with tcp_server() as (servicer, port):
+        client = _client("127.0.0.1", port)
+        try:
+            client.evaluate_point("seeded-bench", _point(), random_seed=seed)
+        finally:
+            client.channel.close()
+
+    request = servicer.requests[0]
+    if seed is None:
+        assert not request.HasField("random_seed")
+    else:
+        assert request.HasField("random_seed")
+        assert request.random_seed == seed
